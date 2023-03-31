@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sokoban</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+
+<body x-data="game" x-init="board[1][1]='p'"
+        x-on:keydown.arrow-right="move(0,1)"
+        x-on:keydown.arrow-left="move(0,-1)"
+        x-on:keydown.arrow-down="move(1,0)"
+        x-on:keydown.arrow-up="move(-1,0)">
+
+<main class="flex justify-center items-center"> 
+    <div class="flex flex-col p-20">
+        <template x-for="(row,index1) in board">
+            <div class="flex">
+                <template x-for="(col,index2) in row">
+                    <div class="w-10 h-10 mb-1 mr-1 bg-gray-200 cursor-pointer hover:opacity-40 text-xs"
+                         :class="cellColor(col)"
+                         @click="board[index1][index2]=block;if(block=='a')goals.push([index1,index2])"
+                         x-text="`x${index1},y${index2},${col}`"
+                         >
+                    </div>
+                </template>
+            </div>
+        </template>
+    </div>
+
+</main>
+
+<button class="p-2 bg-sky-500" @click="localStorage.setItem('level', JSON.stringify(board));">Save level</button>
+<button class="p-2 bg-yellow-200" @click="block='b'">Box</button>
+<button class="p-2 bg-green-200" @click="block='a'">Apple</button>
+<button class="p-2 bg-gray-200" @click="block='w'">Wall</button>
+<button class="p-2 bg-slate-300" @click="block=null">Space</button>
+    
+<script>
+    document.addEventListener('alpine:init', () => {
+        const savedLevel = JSON.parse(localStorage.getItem('level'))
+        const size = 10
+        Alpine.data('game', () => ({
+            board: savedLevel?savedLevel:Array.from(Array(size), () => Array(size).fill(null)),
+            block: 'w',
+            goals: [],
+            levels: [],
+            move(x,y) {
+                const [ i, j ] = this.position()
+                if(this.board[i+x][j+y]=='b') this.pushBox(i,j,x,y)
+                if(this.board[i+x][j+y] != null && this.board[i+x][j+y] != 'a') return
+                this.board[i][j] = null
+                this.board[i+x][j+y] = 'p'
+                this.goals.forEach(([xx,yy]) => {
+                    if(this.board[xx][yy]==null) this.board[xx][yy] = 'a' 
+                })
+            },
+            pushBox(i,j,x,y){
+                if(this.board[i+x+x][j+y+y] == 'w' || this.board[i+x+x][j+y+y] == 'b') return
+                this.board[i+x][j+y] = null
+                this.board[i+x+x][j+y+y] = 'b'
+            },
+            cellColor(cell){
+                if(cell=='p') return 'bg-red-500'
+                if(cell=='w') return 'bg-gray-500'
+                if(cell=='a') return 'bg-green-500'
+                if(cell=='b') return 'bg-yellow-500'
+            },
+            position() {
+                const arr = this.board
+                for (let i = 0; i < arr.length; i++) {
+                    for (let j = 0; j < arr[i].length; j++) {
+                    if (arr[i][j] === 'p') {
+                        return [i, j];
+                    }
+                    }
+                }
+                return null;
+            }
+        }))
+    })
+</script>
+
+</body>
+
+</html>
