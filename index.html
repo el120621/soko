@@ -28,12 +28,12 @@
 
     <main class="flex justify-center items-center flex-col"> 
         <button class="2xl bg-blue-600 text-white px-4 py-2 mt-10" @click="setLevel(currentLevel);checkGoal()" x-text="`RESET LEVEL ${currentLevel+1}`"></button>
-
+        <p class="text-xs p-5 italic text-center">Goal: Push the yellow box to the green with the red<br>Use arrow keys to move</p>
         <div x-cloak x-show="!gameOver" class="flex flex-col">
             <template x-for="(row,index1) in board">
                 <div class="flex">
                     <template x-for="(col,index2) in row">
-                        <div class="w-4 h-4 md:w-5 md:h-5 bg-gray-200 cursor-pointer hover:opacity-40 text-xs"
+                        <div class="w-4 h-4 md:w-5 md:h-5 2xl:w-10 2xl:h-10 bg-gray-200 cursor-pointer hover:opacity-40 text-xs"
                             :class="cellColor(col)"
                             @click="if(devMode) setCells(index1,index2)"
                             >
@@ -43,14 +43,13 @@
             </template>
         </div>
         <div x-cloak x-show="gameOver" class="p-10 text-2xl font-bold">&#x4e;&#x69;&#x63;&#x65;&#x20;&#x6f;&#x6e;&#x65;</div>
-        <div x-cloak x-show="gameOver && currentLevel==1" class="p-10 text-2xl font-bold">&#x42;&#x6f;&#x62;&#x6f;&#x20;&#x6b;&#x61;&#x20;&#x70;&#x61;&#x20;&#x64;&#x69;&#x6e;&excl;&#x20;&#x68;&#x61;&#x68;&#x61;&#x20;&#x79;&#x75;&#x6e;&#x20;&#x6e;&#x61;&#x20;&#x79;&#x75;&#x6e;&period;&#x20;&#x74;&#x79;&#x20;&semi;&rpar;</div>
-        <div x-cloak x-show="gameOver && currentLevel<1" class="bg-red-600 px-4 py-2 mt-10 text-white cursor-pointer" @click="currentLevel+=1;gameOver=false;setLevel(currentLevel);checkGoal()">Next Level</div>
+        <div x-cloak x-show="gameOver && currentLevel==2" class="p-10 text-2xl font-bold">&#x42;&#x6f;&#x62;&#x6f;&#x20;&#x6b;&#x61;&#x20;&#x70;&#x61;&#x20;&#x64;&#x69;&#x6e;&excl;&#x20;&#x68;&#x61;&#x68;&#x61;&#x20;&#x79;&#x75;&#x6e;&#x20;&#x6e;&#x61;&#x20;&#x79;&#x75;&#x6e;&period;&#x20;&#x74;&#x79;&#x20;&semi;&rpar;</div>
+        <div x-cloak x-show="gameOver && currentLevel<2" class="bg-red-600 px-4 py-2 mt-10 text-white cursor-pointer" @click="currentLevel+=1;gameOver=false;setLevel(currentLevel);checkGoal()">Next Level</div>
     </main>
 
     <section  x-cloak x-show="devMode">
         <div class="select-all cursor-pointer" x-text="JSON.stringify(board)"></div><br>
         <div class="select-all cursor-pointer" x-text="JSON.stringify(devGoal)"></div><br>
-        <p x-text="foo"></p>
     </section>
     
 <script>
@@ -59,20 +58,23 @@
         const map = JSON.stringify(
             [
                 {
+                    map:  [[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,"w","w","w","w","w","w","w","w",null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,null,null,null,null,null,"w",null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,null,null,null,"p",null,"w",null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,"w",null,"b",null,null,"w",null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,null,null,null,null,null,"w",null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,null,null,null,null,null,"w",null,null,null,null,null,null],[null,null,null,null,null,null,"w","w","w","w","w","w","w","w",null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],
+                    goal: [[7,8]]
+                },
+                {
                     map:  [[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,"w","w","w","w","w",null,null,null,null,null,null,null,null],[null,null,null,null,null,"w","w","w",null,null,null,"w",null,null,null,null,null,null,null,null],[null,null,null,null,null,"w",null,"p","b",null,null,"w",null,null,null,null,null,null,null,null],[null,null,null,null,null,"w","w","w",null,"b",null,"w",null,null,null,null,null,null,null,null],[null,null,null,null,null,"w",null,"w","w","b",null,"w",null,null,null,null,null,null,null,null],[null,null,null,null,null,"w",null,"w",null,null,null,"w","w",null,null,null,null,null,null,null],[null,null,null,null,null,"w","b",null,"b","b","b",null,"w",null,null,null,null,null,null,null],[null,null,null,null,null,"w",null,null,null,null,null,null,"w",null,null,null,null,null,null,null],[null,null,null,null,null,"w","w","w","w","w","w","w","w",null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],
                     goal: [[9,6],[7,6],[8,10],[10,9],[11,8],[12,9],[11,11]]
                 },
                 {
-                    map: [[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,"w","w","w","w",null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,null,"w","w","w",null,null,null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,null,null,null,"w","w","w",null,null,null,null,null,null],[null,null,null,null,null,null,"w","p","w","b",null,null,null,"w",null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,"b",null,"b",null,null,"w",null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,"b",null,null,"w","w","w",null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,null,"w","w","w",null,null,null,null,null,null,null,null],[null,null,null,null,null,null,"w","w","w","w",null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],
+                    map:  [[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,"w","w","w","w",null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,null,"w","w","w",null,null,null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,null,null,null,"w","w","w",null,null,null,null,null,null],[null,null,null,null,null,null,"w","p","w","b",null,null,null,"w",null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,"b",null,"b",null,null,"w",null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,"b",null,null,"w","w","w",null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,null,"w","w","w",null,null,null,null,null,null,null,null],[null,null,null,null,null,null,"w","w","w","w",null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],
                     goal: [[4,12],[5,12],[5,11],[6,10]]
-                }
+                },
             ]
         )
         localStorage.setItem('levels', map)
         const size = 20
         Alpine.data('game', () => ({
             // board: Array.from(Array(size), () => Array(size).fill(null)),
-            foo: btoa(map),
             currentLevel: 0,
             board: null,
             goals: null,
@@ -82,7 +84,7 @@
             gameOver: false,
             setCells(index1,index2) {
                 this.board[index1][index2] = this.block
-                if(block=='a') this.devGoal.push([index1,index2])
+                if(this.block=='a') this.devGoal.push([index1,index2])
             },
             setLevel(x) {
                 this.board = JSON.parse(localStorage.getItem('levels'))[x].map
