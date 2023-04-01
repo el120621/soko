@@ -13,7 +13,7 @@
     </style>
 </head>
 
-<body x-data="game" x-init="setLevel(currentLevel);checkGoal()"
+<body x-data="game" x-init="setLevel(currentLevel);checkGoal()" @resize.window="isMobile = (window.innerWidth < 768) ? true : false"
         x-on:keydown.arrow-right="move(0,1)"
         x-on:keydown.arrow-left="move(0,-1)"
         x-on:keydown.arrow-down="move(1,0)"
@@ -26,9 +26,9 @@
         <button class="p-2 bg-slate-300" @click="block=null">Space</button>
     </section>
 
-    <main class="flex justify-center items-center flex-col"> 
+    <main x-cloak x-show="!isMobile" class="flex justify-center items-center flex-col"> 
         <button class="2xl bg-blue-600 text-white px-4 py-2 mt-10" @click="setLevel(currentLevel);checkGoal()" x-text="`RESET LEVEL ${currentLevel+1}`"></button>
-        <p class="text-xs p-5 italic text-center">Goal: Push the yellow box to the green with the red<br>Use arrow keys to move</p>
+        <p class="text-xs p-5 italic text-center">Goal: Push the yellow box to the green<br>Use arrow keys to move</p>
         <div x-cloak x-show="!gameOver" class="flex flex-col">
             <template x-for="(row,index1) in board">
                 <div class="flex">
@@ -42,10 +42,12 @@
                 </div>
             </template>
         </div>
-        <div x-cloak x-show="gameOver" class="p-10 text-2xl font-bold">&#x4e;&#x69;&#x63;&#x65;&#x20;&#x6f;&#x6e;&#x65;</div>
+        <!-- <div x-cloak x-show="gameOver" class="p-10 text-2xl font-bold">&#x4e;&#x69;&#x63;&#x65;&#x20;&#x6f;&#x6e;&#x65;</div> -->
         <div x-cloak x-show="gameOver && currentLevel==2" class="p-10 text-2xl font-bold">&#x42;&#x6f;&#x62;&#x6f;&#x20;&#x6b;&#x61;&#x20;&#x70;&#x61;&#x20;&#x64;&#x69;&#x6e;&excl;&#x20;&#x68;&#x61;&#x68;&#x61;&#x20;&#x79;&#x75;&#x6e;&#x20;&#x6e;&#x61;&#x20;&#x79;&#x75;&#x6e;&period;&#x20;&#x74;&#x79;&#x20;&semi;&rpar;</div>
-        <div x-cloak x-show="gameOver && currentLevel<2" class="bg-red-600 px-4 py-2 mt-10 text-white cursor-pointer" @click="currentLevel+=1;gameOver=false;setLevel(currentLevel);checkGoal()">Next Level</div>
+        <div x-cloak x-show="gameOver && currentLevel<levels-1" class="bg-red-600 px-4 py-2 mt-10 text-white cursor-pointer" @click="currentLevel+=1;gameOver=false;setLevel(currentLevel);checkGoal()">Next Level</div>
     </main>
+
+    <div x-show="isMobile" class="text-center p-5">Sorry di pwede sa phone</div>
 
     <section  x-cloak x-show="devMode">
         <div class="select-all cursor-pointer" x-text="JSON.stringify(board)"></div><br>
@@ -75,7 +77,10 @@
         const size = 20
         Alpine.data('game', () => ({
             // board: Array.from(Array(size), () => Array(size).fill(null)),
+            screenWidth: window.innerWidth,
+            isMobile: false,
             currentLevel: 0,
+            levels: JSON.parse(localStorage.getItem('levels')).length,
             board: null,
             goals: null,
             devMode: false,
