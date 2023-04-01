@@ -8,56 +8,101 @@
     <title>Sokoban</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
 </head>
 
-<body x-data="game" x-init="board[1][1]='p'"
+<body x-data="game" x-init="setLevel(currentLevel);checkGoal()"
         x-on:keydown.arrow-right="move(0,1)"
         x-on:keydown.arrow-left="move(0,-1)"
         x-on:keydown.arrow-down="move(1,0)"
         x-on:keydown.arrow-up="move(-1,0)">
+    <section x-cloak x-show="devMode">
+        <button class="p-2 bg-yellow-200" @click="block='b'">Box</button>
+        <button class="p-2 bg-green-200" @click="block='a'">Apple</button>
+        <button class="p-2 bg-gray-200" @click="block='w'">Wall</button>
+        <button class="p-2 bg-red-200" @click="block='p'">Player</button>
+        <button class="p-2 bg-slate-300" @click="block=null">Space</button>
+    </section>
 
-<main class="flex justify-center items-center"> 
-    <div class="flex flex-col p-20">
-        <template x-for="(row,index1) in board">
-            <div class="flex">
-                <template x-for="(col,index2) in row">
-                    <div class="w-10 h-10 mb-1 mr-1 bg-gray-200 cursor-pointer hover:opacity-40 text-xs"
-                         :class="cellColor(col)"
-                         @click="board[index1][index2]=block;if(block=='a')goals.push([index1,index2])"
-                         x-text="`x${index1},y${index2},${col}`"
-                         >
-                    </div>
-                </template>
-            </div>
-        </template>
-    </div>
+    <main class="flex justify-center items-center flex-col"> 
+        <button class="2xl bg-blue-600 text-white px-4 py-2 mt-10" @click="setLevel(currentLevel);checkGoal()" x-text="`RESET LEVEL ${currentLevel+1}`"></button>
 
-</main>
+        <div x-cloak x-show="!gameOver" class="flex flex-col">
+            <template x-for="(row,index1) in board">
+                <div class="flex">
+                    <template x-for="(col,index2) in row">
+                        <div class="w-10 h-10 mb-1 mr-1 bg-gray-200 cursor-pointer hover:opacity-40 text-xs"
+                            :class="cellColor(col)"
+                            @click="if(devMode) setCells(index1,index2)"
+                            >
+                        </div>
+                    </template>
+                </div>
+            </template>
+        </div>
+        <div x-cloak x-show="gameOver" class="p-10 text-2xl font-bold">&#x4e;&#x69;&#x63;&#x65;&#x20;&#x6f;&#x6e;&#x65;&excl;&#x20;&#x42;&#x6f;&#x62;&#x6f;&#x20;&#x6b;&#x61;&#x20;&#x70;&#x61;&#x20;&#x64;&#x69;&#x6e;&excl;</div>
+        <div x-cloak x-show="gameOver && currentLevel<1" class="bg-red-600 px-4 py-2 mt-10 text-white cursor-pointer" @click="currentLevel+=1;gameOver=false;setLevel(currentLevel);checkGoal()">Next Level</div>
+    </main>
 
-<button class="p-2 bg-sky-500" @click="localStorage.setItem('level', JSON.stringify(board));">Save level</button>
-<button class="p-2 bg-yellow-200" @click="block='b'">Box</button>
-<button class="p-2 bg-green-200" @click="block='a'">Apple</button>
-<button class="p-2 bg-gray-200" @click="block='w'">Wall</button>
-<button class="p-2 bg-slate-300" @click="block=null">Space</button>
+    <section  x-cloak x-show="devMode">
+        <div class="select-all cursor-pointer" x-text="JSON.stringify(board)"></div><br>
+        <div class="select-all cursor-pointer" x-text="JSON.stringify(devGoal)"></div><br>
+        <p x-text="foo"></p>
+    </section>
     
 <script>
     document.addEventListener('alpine:init', () => {
-        const savedLevel = JSON.parse(localStorage.getItem('level'))
-        const size = 10
+
+        const map = JSON.stringify(
+            [
+                {
+                    map:  [[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,"w","w","w","w","w",null,null,null,null,null,null,null,null],[null,null,null,null,null,"w","w","w",null,null,null,"w",null,null,null,null,null,null,null,null],[null,null,null,null,null,"w",null,"p","b",null,null,"w",null,null,null,null,null,null,null,null],[null,null,null,null,null,"w","w","w",null,"b",null,"w",null,null,null,null,null,null,null,null],[null,null,null,null,null,"w",null,"w","w","b",null,"w",null,null,null,null,null,null,null,null],[null,null,null,null,null,"w",null,"w",null,null,null,"w","w",null,null,null,null,null,null,null],[null,null,null,null,null,"w","b",null,"b","b","b",null,"w",null,null,null,null,null,null,null],[null,null,null,null,null,"w",null,null,null,null,null,null,"w",null,null,null,null,null,null,null],[null,null,null,null,null,"w","w","w","w","w","w","w","w",null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],
+                    goal: [[9,6],[7,6],[8,10],[10,9],[11,8],[12,9],[11,11]]
+                },
+                {
+                    map: [[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,"w","w","w","w",null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,null,"w","w","w",null,null,null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,null,null,null,"w","w","w",null,null,null,null,null,null],[null,null,null,null,null,null,"w","p","w","b",null,null,null,"w",null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,"b",null,"b",null,null,"w",null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,"b",null,null,"w","w","w",null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,null,"w","w","w",null,null,null,null,null,null,null,null],[null,null,null,null,null,null,"w","w","w","w",null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],
+                    goal: [[4,12],[5,12],[5,11],[6,10]]
+                }
+            ]
+        )
+        localStorage.setItem('levels', map)
+        const size = 20
         Alpine.data('game', () => ({
-            board: savedLevel?savedLevel:Array.from(Array(size), () => Array(size).fill(null)),
+            // board: Array.from(Array(size), () => Array(size).fill(null)),
+            foo: btoa(map),
+            currentLevel: 0,
+            board: null,
+            goals: null,
+            devMode: false,
+            devGoal: [],
             block: 'w',
-            goals: [],
-            levels: [],
+            gameOver: false,
+            setCells(index1,index2) {
+                this.board[index1][index2] = this.block
+                if(block=='a') this.devGoal.push([index1,index2])
+            },
+            setLevel(x) {
+                this.board = JSON.parse(localStorage.getItem('levels'))[x].map
+                this.goals = JSON.parse(localStorage.getItem('levels'))[x].goal
+            },
+            checkGoal() {
+                const boxes = this.getIndexes2DArray(this.board,'b').flat().sort()
+                const goals = this.goals.flat().sort()
+                this.goals.forEach(([xx,yy]) => {
+                    if(this.board[xx][yy]==null) this.board[xx][yy] = 'a'
+                })
+                if(JSON.stringify(boxes)==JSON.stringify(goals)) this.gameOver = true
+            },
             move(x,y) {
+                if(this.gameOver) return
                 const [ i, j ] = this.position()
                 if(this.board[i+x][j+y]=='b') this.pushBox(i,j,x,y)
-                if(this.board[i+x][j+y] != null && this.board[i+x][j+y] != 'a') return
+                if(this.board[i+x][j+y] && this.board[i+x][j+y] != 'a') return
                 this.board[i][j] = null
                 this.board[i+x][j+y] = 'p'
-                this.goals.forEach(([xx,yy]) => {
-                    if(this.board[xx][yy]==null) this.board[xx][yy] = 'a' 
-                })
+                this.checkGoal()
             },
             pushBox(i,j,x,y){
                 if(this.board[i+x+x][j+y+y] == 'w' || this.board[i+x+x][j+y+y] == 'b') return
@@ -69,6 +114,7 @@
                 if(cell=='w') return 'bg-gray-500'
                 if(cell=='a') return 'bg-green-500'
                 if(cell=='b') return 'bg-yellow-500'
+                if(!cell) return this.devMode?'bg-black/20':'bg-white'
             },
             position() {
                 const arr = this.board
@@ -80,6 +126,17 @@
                     }
                 }
                 return null;
+            },
+            getIndexes2DArray(arr, item) {
+                let indexes = [];
+                for (let i = 0; i < arr.length; i++) {
+                    for (let j = 0; j < arr[i].length; j++) {
+                    if (arr[i][j] === item) {
+                        indexes.push([i, j]);
+                    }
+                    }
+                }
+                return indexes;
             }
         }))
     })
