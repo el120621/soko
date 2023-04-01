@@ -33,7 +33,7 @@
             <template x-for="(row,index1) in board">
                 <div class="flex">
                     <template x-for="(col,index2) in row">
-                        <div class="w-10 h-10 mb-1 mr-1 bg-gray-200 cursor-pointer hover:opacity-40 text-xs"
+                        <div class="w-4 h-4 md:w-5 md:h-5 bg-gray-200 cursor-pointer hover:opacity-40 text-xs"
                             :class="cellColor(col)"
                             @click="if(devMode) setCells(index1,index2)"
                             >
