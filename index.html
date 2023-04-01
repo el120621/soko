@@ -42,7 +42,8 @@
                 </div>
             </template>
         </div>
-        <div x-cloak x-show="gameOver" class="p-10 text-2xl font-bold">&#x4e;&#x69;&#x63;&#x65;&#x20;&#x6f;&#x6e;&#x65;&excl;&#x20;&#x42;&#x6f;&#x62;&#x6f;&#x20;&#x6b;&#x61;&#x20;&#x70;&#x61;&#x20;&#x64;&#x69;&#x6e;&excl;</div>
+        <div x-cloak x-show="gameOver" class="p-10 text-2xl font-bold">&#x4e;&#x69;&#x63;&#x65;&#x20;&#x6f;&#x6e;&#x65;</div>
+        <div x-cloak x-show="gameOver && currentLevel==1" class="p-10 text-2xl font-bold">&#x42;&#x6f;&#x62;&#x6f;&#x20;&#x6b;&#x61;&#x20;&#x70;&#x61;&#x20;&#x64;&#x69;&#x6e;&excl;&#x20;&#x68;&#x61;&#x68;&#x61;&#x20;&#x79;&#x75;&#x6e;&#x20;&#x6e;&#x61;&#x20;&#x79;&#x75;&#x6e;&period;&#x20;&#x74;&#x79;&#x20;&semi;&rpar;</div>
         <div x-cloak x-show="gameOver && currentLevel<1" class="bg-red-600 px-4 py-2 mt-10 text-white cursor-pointer" @click="currentLevel+=1;gameOver=false;setLevel(currentLevel);checkGoal()">Next Level</div>
     </main>
 
