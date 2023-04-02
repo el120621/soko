@@ -13,7 +13,7 @@
     </style>
 </head>
 
-<body x-data="game" x-init="setLevel(currentLevel);checkGoal()" @resize.window="isMobile = (window.innerWidth < 768) ? true : false"
+<body x-data="game" x-init="setLevel(currentLevel);checkGoal();initControls()" @resize.window="initControls()"
         x-on:keydown.arrow-right="move(0,1)"
         x-on:keydown.arrow-left="move(0,-1)"
         x-on:keydown.arrow-down="move(1,0)"
@@ -26,7 +26,7 @@
         <button class="p-2 bg-slate-300" @click="block=null">Space</button>
     </section>
 
-    <main x-cloak x-show="!isMobile" class="flex justify-center items-center flex-col"> 
+    <main class="flex justify-center items-center flex-col"> 
         <button class="2xl bg-blue-600 text-white px-4 py-2 mt-5" @click="setLevel(currentLevel);checkGoal()" x-text="`RESET LEVEL ${currentLevel+1}`"></button>
         <p class="text-xs mt-5 italic text-center">Goal: Push the yellow box to the green<br>Use arrow keys to move</p>
         <div x-cloak x-show="!gameOver" class="flex flex-col">
@@ -45,9 +45,25 @@
         <div x-cloak x-show="gameOver" class="p-10 text-2xl font-bold"  x-html="msg(currentLevel)"></div>
         <div x-cloak x-show="gameOver && currentLevel>levels-1" class="p-10 text-2xl font-bold">&#x42;&#x6f;&#x62;&#x6f;&#x20;&#x6b;&#x61;&#x20;&#x70;&#x61;&#x20;&#x64;&#x69;&#x6e;&excl;&#x20;&#x68;&#x61;&#x68;&#x61;&#x20;&#x79;&#x75;&#x6e;&#x20;&#x6e;&#x61;&#x20;&#x79;&#x75;&#x6e;&period;&#x20;&#x74;&#x79;&#x20;&semi;&rpar;</div>
         <div x-cloak x-show="gameOver && currentLevel<levels-1" class="bg-red-600 px-4 py-2 mt-10 text-white cursor-pointer" @click="currentLevel+=1;gameOver=false;setLevel(currentLevel);checkGoal()">Next Level</div>
+    
+        <div x-cloak x-show="isMobile && !gameOver && !currentLevel<levels-1" class="flex flex-col items-center">
+            <svg @click="move(-1,0)" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 cursor-pointer">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 19.5v-15m0 0l-6.75 6.75M12 4.5l6.75 6.75" />
+            </svg>
+            <div class="flex">
+                <svg  @click="move(0,-1)" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 cursor-pointer">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                </svg>
+                <svg  @click="move(1,0)" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 cursor-pointer">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3" />
+                </svg>
+                <svg  @click="move(0,1)" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 cursor-pointer">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
+            </div>
+            
+        </div>
     </main>
-
-    <div x-show="isMobile" class="text-center p-5">Sorry di pwede sa phone</div>
 
     <section  x-cloak x-show="devMode">
         <div class="select-all cursor-pointer" x-text="JSON.stringify(board)"></div><br>
@@ -64,8 +80,8 @@
                     goal: [[7,8]]
                 },
                 {
-                    map:  [[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,"w","w","w","w","w",null,null,null,null,null,null,null,null],[null,null,null,null,null,"w","w","w",null,null,null,"w",null,null,null,null,null,null,null,null],[null,null,null,null,null,"w",null,"p","b",null,null,"w",null,null,null,null,null,null,null,null],[null,null,null,null,null,"w","w","w",null,"b",null,"w",null,null,null,null,null,null,null,null],[null,null,null,null,null,"w",null,"w","w","b",null,"w",null,null,null,null,null,null,null,null],[null,null,null,null,null,"w",null,"w",null,null,null,"w","w",null,null,null,null,null,null,null],[null,null,null,null,null,"w","b",null,"b","b","b",null,"w",null,null,null,null,null,null,null],[null,null,null,null,null,"w",null,null,null,null,null,null,"w",null,null,null,null,null,null,null],[null,null,null,null,null,"w","w","w","w","w","w","w","w",null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],
-                    goal: [[9,6],[7,6],[8,10],[10,9],[11,8],[12,9],[11,11]]
+                    map:  [[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,"w","w","w","w","w",null,null,null,null,null,null,null,null],[null,null,null,null,null,null,"w","w","p",null,null,"w","w","w",null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,"b","b","b",null,null,"w",null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,"w",null,null,null,null,"w",null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,null,null,null,"w","w","w",null,null,null,null,null,null],[null,null,null,null,null,null,"w","w","w","w","w","w",null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],                   
+                    goal: [[2,10],[4,9],[5,8]]
                 },
                 {
                     map:  [[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,"w","w","w","w",null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,null,"w","w","w",null,null,null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,null,null,null,"w","w","w",null,null,null,null,null,null],[null,null,null,null,null,null,"w","p","w","b",null,null,null,"w",null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,"b",null,"b",null,null,"w",null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,"b",null,null,"w","w","w",null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,null,"w","w","w",null,null,null,null,null,null,null,null],[null,null,null,null,null,null,"w","w","w","w",null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],
@@ -91,11 +107,14 @@
             devGoal: [],
             block: 'w',
             gameOver: false,
+            initControls(){
+                this.isMobile = (window.innerWidth < 768) ? true : false
+            },
             msg(x) {
                 switch(x){
-                    case 0: return '&#x70;&#x72;&#x61;&#x6b;&#x74;&#x69;&#x73;&#x20;&#x6c;&#x61;&#x6e;&#x67;&#x20;&#x79;&#x6f;&#x6e;&comma;&#x20;&#x67;&#x61;&#x6d;&#x65;&#x20;&#x6e;&#x61;&excl;';
-                    case 1: return '&#x63;&#x68;&#x61;&#x6d;&#x62;&#x61;'
-                    case 2: return '&#x6f;&#x6b;&period;&#x20;&#x65;&#x74;&#x6f;&#x20;&#x6e;&#x61;&#x6d;&#x61;&#x6e;&period;&#x20;&#x6c;&#x61;&#x73;&#x74;&#x20;&#x6e;&#x61;'
+                    case 0: return '&#x4f;&#x4b;';
+                    case 1: return '&#x62;&#x6f;&#x62;&#x6f;'
+                    case 2: return '&#x62;&#x6f;&#x62;&#x6f;&#x20;&#x70;&#x61;&#x20;&#x72;&#x69;&#x6e;&period;&#x20;&#x68;&#x61;&#x68;&#x61;'
                     case 3: return '&#x4e;&#x69;&#x63;&#x65;&#x20;&#x6f;&#x6e;&#x65;&excl;&#x20;&#x42;&#x6f;&#x62;&#x6f;&#x20;&#x6b;&#x61;&#x20;&#x70;&#x61;&#x20;&#x64;&#x69;&#x6e;&excl;&#x20;&#x68;&#x61;&#x68;&#x61;&#x20;&#x79;&#x75;&#x6e;&#x20;&#x6e;&#x61;&#x20;&#x79;&#x75;&#x6e;&period;&#x20;&#x74;&#x79;&#x20;&semi;&rpar;'
                 }
             },
