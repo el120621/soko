@@ -25,7 +25,7 @@
         <button class="p-2 bg-red-200" @click="block='p'">Player</button>
         <button class="p-2 bg-slate-300" @click="block=null">Space</button>
     </section>
-
+<!--  BAT NANDITO KA? WALANG SAGOT DITO OY! HAHAHA -->
     <main class="flex justify-center items-center flex-col"> 
         <button class="2xl bg-blue-600 text-white px-4 py-2 mt-5" @click="setLevel(currentLevel);checkGoal()" x-text="`RESET LEVEL ${currentLevel+1}`"></button>
         <p class="text-xs mt-5 italic text-center">Goal: Push the yellow box to the green<br>Use arrow keys to move</p>
@@ -148,10 +148,10 @@
                 this.board[i+x+x][j+y+y] = 'b'
             },
             cellColor(cell){
-                if(cell=='p') return 'bg-red-500'
-                if(cell=='w') return 'bg-gray-500'
-                if(cell=='a') return 'bg-green-500'
-                if(cell=='b') return 'bg-yellow-500'
+                if(cell=='p') return 'bg-red-400'
+                if(cell=='w') return 'bg-gray-400'
+                if(cell=='a') return 'bg-green-400'
+                if(cell=='b') return 'bg-yellow-400'
                 if(!cell) return this.devMode?'bg-black/20':'bg-white'
             },
             position() {
