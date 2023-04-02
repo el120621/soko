@@ -27,8 +27,8 @@
     </section>
 
     <main x-cloak x-show="!isMobile" class="flex justify-center items-center flex-col"> 
-        <button class="2xl bg-blue-600 text-white px-4 py-2 mt-10" @click="setLevel(currentLevel);checkGoal()" x-text="`RESET LEVEL ${currentLevel+1}`"></button>
-        <p class="text-xs p-5 italic text-center">Goal: Push the yellow box to the green<br>Use arrow keys to move</p>
+        <button class="2xl bg-blue-600 text-white px-4 py-2 mt-5" @click="setLevel(currentLevel);checkGoal()" x-text="`RESET LEVEL ${currentLevel+1}`"></button>
+        <p class="text-xs mt-5 italic text-center">Goal: Push the yellow box to the green<br>Use arrow keys to move</p>
         <div x-cloak x-show="!gameOver" class="flex flex-col">
             <template x-for="(row,index1) in board">
                 <div class="flex">
@@ -42,8 +42,8 @@
                 </div>
             </template>
         </div>
-        <!-- <div x-cloak x-show="gameOver" class="p-10 text-2xl font-bold">&#x4e;&#x69;&#x63;&#x65;&#x20;&#x6f;&#x6e;&#x65;</div> -->
-        <div x-cloak x-show="gameOver && currentLevel==2" class="p-10 text-2xl font-bold">&#x42;&#x6f;&#x62;&#x6f;&#x20;&#x6b;&#x61;&#x20;&#x70;&#x61;&#x20;&#x64;&#x69;&#x6e;&excl;&#x20;&#x68;&#x61;&#x68;&#x61;&#x20;&#x79;&#x75;&#x6e;&#x20;&#x6e;&#x61;&#x20;&#x79;&#x75;&#x6e;&period;&#x20;&#x74;&#x79;&#x20;&semi;&rpar;</div>
+        <div x-cloak x-show="gameOver" class="p-10 text-2xl font-bold"  x-html="msg(currentLevel)"></div>
+        <div x-cloak x-show="gameOver && currentLevel>levels-1" class="p-10 text-2xl font-bold">&#x42;&#x6f;&#x62;&#x6f;&#x20;&#x6b;&#x61;&#x20;&#x70;&#x61;&#x20;&#x64;&#x69;&#x6e;&excl;&#x20;&#x68;&#x61;&#x68;&#x61;&#x20;&#x79;&#x75;&#x6e;&#x20;&#x6e;&#x61;&#x20;&#x79;&#x75;&#x6e;&period;&#x20;&#x74;&#x79;&#x20;&semi;&rpar;</div>
         <div x-cloak x-show="gameOver && currentLevel<levels-1" class="bg-red-600 px-4 py-2 mt-10 text-white cursor-pointer" @click="currentLevel+=1;gameOver=false;setLevel(currentLevel);checkGoal()">Next Level</div>
     </main>
 
@@ -71,6 +71,10 @@
                     map:  [[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,"w","w","w","w",null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,null,"w","w","w",null,null,null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,null,null,null,"w","w","w",null,null,null,null,null,null],[null,null,null,null,null,null,"w","p","w","b",null,null,null,"w",null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,"b",null,"b",null,null,"w",null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,"b",null,null,"w","w","w",null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,null,"w","w","w",null,null,null,null,null,null,null,null],[null,null,null,null,null,null,"w","w","w","w",null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],
                     goal: [[4,12],[5,12],[5,11],[6,10]]
                 },
+                {
+                    map: [[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,"w","w","w","w",null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,"w",null,null,"w","w","w","w",null,null,null,null,null,null],[null,null,null,null,null,null,"w","w",null,null,null,null,null,"w",null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,"b",null,"b","w",null,"w",null,null,null,null,null,null],[null,null,null,null,null,null,"w","p","w",null,"b",null,null,"w",null,null,null,null,null,null],[null,null,null,null,null,null,"w",null,null,"b",null,"w","w","w",null,null,null,null,null,null],[null,null,null,null,null,null,"w","w","w",null,null,"w",null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,"w","w","w","w",null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],
+                    goal: [[6,9],[5,9],[3,9],[3,11]]
+                },
             ]
         )
         localStorage.setItem('levels', map)
@@ -87,6 +91,14 @@
             devGoal: [],
             block: 'w',
             gameOver: false,
+            msg(x) {
+                switch(x){
+                    case 0: return '&#x70;&#x72;&#x61;&#x6b;&#x74;&#x69;&#x73;&#x20;&#x6c;&#x61;&#x6e;&#x67;&#x20;&#x79;&#x6f;&#x6e;&comma;&#x20;&#x67;&#x61;&#x6d;&#x65;&#x20;&#x6e;&#x61;&excl;';
+                    case 1: return '&#x63;&#x68;&#x61;&#x6d;&#x62;&#x61;'
+                    case 2: return '&#x6f;&#x6b;&period;&#x20;&#x65;&#x74;&#x6f;&#x20;&#x6e;&#x61;&#x6d;&#x61;&#x6e;&period;&#x20;&#x6c;&#x61;&#x73;&#x74;&#x20;&#x6e;&#x61;'
+                    case 3: return '&#x4e;&#x69;&#x63;&#x65;&#x20;&#x6f;&#x6e;&#x65;&excl;&#x20;&#x42;&#x6f;&#x62;&#x6f;&#x20;&#x6b;&#x61;&#x20;&#x70;&#x61;&#x20;&#x64;&#x69;&#x6e;&excl;&#x20;&#x68;&#x61;&#x68;&#x61;&#x20;&#x79;&#x75;&#x6e;&#x20;&#x6e;&#x61;&#x20;&#x79;&#x75;&#x6e;&period;&#x20;&#x74;&#x79;&#x20;&semi;&rpar;'
+                }
+            },
             setCells(index1,index2) {
                 this.board[index1][index2] = this.block
                 if(this.block=='a') this.devGoal.push([index1,index2])
