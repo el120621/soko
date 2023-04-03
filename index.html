@@ -28,7 +28,7 @@
 <!--  BAT NANDITO KA? WALANG SAGOT DITO OY! HAHAHA -->
     <div x-cloak x-show="claim" class="flex justify-center p-10"> <img src="https://media.tenor.com/D6ZU_ek2UNIAAAAd/cong-tv-prank.gif" alt=""> </div>
     <main class="flex justify-center items-center flex-col" x-cloak x-show="!claim"> 
-        <button class="2xl bg-blue-600 text-white px-4 py-2 mt-5" @click="setLevel(currentLevel);checkGoal()" x-text="`RESET LEVEL ${currentLevel+1}`"></button>
+        <button x-cloak x-show="!gameOver" class="2xl bg-blue-600 text-white px-4 py-2 mt-5" @click="setLevel(currentLevel);checkGoal()" x-text="`RESET LEVEL ${currentLevel+1}`"></button>
         <p class="text-xs mt-5 italic text-center">Goal: Push the yellow box to the green<br>Use arrow keys to move</p>
         <div x-cloak x-show="!gameOver" class="flex flex-col">
             <template x-for="(row,index1) in board">
