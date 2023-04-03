@@ -26,7 +26,8 @@
         <button class="p-2 bg-slate-300" @click="block=null">Space</button>
     </section>
 <!--  BAT NANDITO KA? WALANG SAGOT DITO OY! HAHAHA -->
-    <main class="flex justify-center items-center flex-col"> 
+    <div x-cloak x-show="claim" class="flex justify-center p-10"> <img src="https://media.tenor.com/D6ZU_ek2UNIAAAAd/cong-tv-prank.gif" alt=""> </div>
+    <main class="flex justify-center items-center flex-col" x-cloak x-show="!claim"> 
         <button class="2xl bg-blue-600 text-white px-4 py-2 mt-5" @click="setLevel(currentLevel);checkGoal()" x-text="`RESET LEVEL ${currentLevel+1}`"></button>
         <p class="text-xs mt-5 italic text-center">Goal: Push the yellow box to the green<br>Use arrow keys to move</p>
         <div x-cloak x-show="!gameOver" class="flex flex-col">
@@ -42,13 +43,13 @@
                 </div>
             </template>
         </div>
-        <div x-cloak x-show="gameOver && currentLevel==levels-1" class="flex jusify-center items-center mt-10 p-3" >
+        <div x-cloak x-show="gameOver && currentLevel==levels-1" class="flex jusify-center items-center mt-10 p-3" x-data="{accept:'Accept'}">
             <div class="flex justify-center h-32 w-full text-xs flex-col md:flex-row">
                 <div class=" text-white bg-gray-800 text-xs rounded-t-lg md:rounded-none md:rounded-l-lg  p-4 justify-between">
                     <h2 class="text-gray-50 text-sm">You've been gifted a subscription!</h2>
                     <p class="text-gray-400">`L#1124 has gifted you Nitro for 1 month!</p>
-                    <div class="flex mt-9">
-                        <button class="rounded-sm bg-green-400/80 text-white px-4 py-2">Accept</button>
+                    <div class="flex mt-8">
+                        <button class="rounded-sm bg-green-400/80 text-white px-4 py-2" @click="accept='Claiming...';setTimeout(()=>claim=true,10000)" x-text="accept"></button>
                         <p class="ml-auto text-xs text-gray-500">Expires in 48 hours</p>
                     </div>
                 </div>
@@ -114,6 +115,7 @@
         Alpine.data('game', () => ({
             // board: Array.from(Array(size), () => Array(size).fill(null)),
             screenWidth: window.innerWidth,
+            claim: false,
             isMobile: false,
             currentLevel: 0,
             levels: JSON.parse(localStorage.getItem('levels')).length,
