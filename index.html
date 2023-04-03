@@ -26,7 +26,7 @@
         <button class="p-2 bg-slate-300" @click="block=null">Space</button>
     </section>
 <!--  BAT NANDITO KA? WALANG SAGOT DITO OY! HAHAHA -->
-    <div x-cloak x-show="claim" class="flex justify-center p-10"> <img src="https://media.tenor.com/D6ZU_ek2UNIAAAAd/cong-tv-prank.gif" alt=""> </div>
+    <div x-cloak x-show="claim" class="flex justify-center p-10"> <img :src="atob('aHR0cHM6Ly9tZWRpYS50ZW5vci5jb20vRDZaVV9lazJVTklBQUFBZC9jb25nLXR2LXByYW5rLmdpZg==')" alt=""> </div>
     <main class="flex justify-center items-center flex-col" x-cloak x-show="!claim"> 
         <button x-cloak x-show="!gameOver" class="2xl bg-blue-600 text-white px-4 py-2 mt-5" @click="setLevel(currentLevel);checkGoal()" x-text="`RESET LEVEL ${currentLevel+1}`"></button>
         <p class="text-xs mt-5 italic text-center">Goal: Push the yellow box to the green<br>Use arrow keys to move</p>
