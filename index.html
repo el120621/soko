@@ -26,8 +26,8 @@
         <button class="p-2 bg-slate-300" @click="block=null">Space</button>
     </section>
 <!--  BAT NANDITO KA? WALANG SAGOT DITO OY! HAHAHA -->
-    <div x-cloak x-show="claim" class="flex justify-center p-10"> <img :src="atob('aHR0cHM6Ly9tZWRpYS50ZW5vci5jb20vRDZaVV9lazJVTklBQUFBZC9jb25nLXR2LXByYW5rLmdpZg==')" alt=""> </div>
-    <main class="flex justify-center items-center flex-col" x-cloak x-show="!claim"> 
+    <div x-cloak x-show="clxm" class="flex justify-center p-10"> <img :src="atob('aHR0cHM6Ly9tZWRpYS50ZW5vci5jb20vRDZaVV9lazJVTklBQUFBZC9jb25nLXR2LXByYW5rLmdpZg==')" alt=""> </div>
+    <main class="flex justify-center items-center flex-col" x-cloak x-show="!clxm"> 
         <button x-cloak x-show="!gameOver" class="2xl bg-blue-600 text-white px-4 py-2 mt-5" @click="setLevel(currentLevel);checkGoal()" x-text="`RESET LEVEL ${currentLevel+1}`"></button>
         <p class="text-xs mt-5 italic text-center">Goal: Push the yellow box to the green<br>Use arrow keys to move</p>
         <div x-cloak x-show="!gameOver" class="flex flex-col">
@@ -49,7 +49,7 @@
                     <h2 class="text-gray-50 text-sm">&#x59;&#x6f;&#x75;&apos;&#x76;&#x65;&#x20;&#x62;&#x65;&#x65;&#x6e;&#x20;&#x67;&#x69;&#x66;&#x74;&#x65;&#x64;&#x20;&#x61;&#x20;&#x73;&#x75;&#x62;&#x73;&#x63;&#x72;&#x69;&#x70;&#x74;&#x69;&#x6f;&#x6e;&excl;</h2>
                     <p class="text-gray-400">&grave;&#x4c;&num;&#x31;&#x31;&#x32;&#x34;&#x20;&#x68;&#x61;&#x73;&#x20;&#x67;&#x69;&#x66;&#x74;&#x65;&#x64;&#x20;&#x79;&#x6f;&#x75;&#x20;&#x4e;&#x69;&#x74;&#x72;&#x6f;&#x20;&#x66;&#x6f;&#x72;&#x20;&#x31;&#x20;&#x6d;&#x6f;&#x6e;&#x74;&#x68;&excl;</p>
                     <div class="flex mt-8">
-                        <button class="rounded-sm bg-green-400/80 text-white px-4 py-2" @click="accept='Claiming...';setTimeout(()=>claim=true,10000)" x-text="accept"></button>
+                        <button class="rounded-sm bg-green-400/80 text-white px-4 py-2" @click="accept='Claiming...';setTimeout(()=>clxm=true,10000)" x-text="accept"></button>
                         <p class="ml-auto text-xs text-gray-500">&#x45;&#x78;&#x70;&#x69;&#x72;&#x65;&#x73;&#x20;&#x69;&#x6e;&#x20;&#x34;&#x38;&#x20;&#x68;&#x6f;&#x75;&#x72;&#x73;</p>
                     </div>
                 </div>
